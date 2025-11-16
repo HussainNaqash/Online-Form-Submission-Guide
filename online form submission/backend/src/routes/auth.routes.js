@@ -39,7 +39,6 @@ router.post("/forgot-password", forgotPassword);
 // @access  Public
 router.post("/reset-password", resetPassword);
 
-// --- New Route for Email Verification ---
 // @route   GET /api/auth/verify-email?token=xxx
 // @desc    Verify user's email
 // @access  Public
