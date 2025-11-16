@@ -48,7 +48,7 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Hide password in responses
+// Hide password in response
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;
