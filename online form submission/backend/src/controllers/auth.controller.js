@@ -50,7 +50,6 @@ export const registerUser = async (req, res) => {
     user.emailVerificationTokenExpires = Date.now() + 3600000; // 1 hour
     await user.save();
 
-    // Send verification email with button
     await sendVerificationEmail(email, verificationToken);
 
     return res.status(201).json({
