@@ -42,7 +42,6 @@ otpSchema.pre("save", async function (next) {
   }
 });
 
-// --- Mongoose Methods ---
 /**
  * Compares an entered OTP with the hashed OTP in the database.
  * @param {string} enteredOtp - The plain text OTP from the user.
