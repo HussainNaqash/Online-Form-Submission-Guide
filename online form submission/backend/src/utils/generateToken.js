@@ -6,7 +6,6 @@ import jwt from "jsonwebtoken";
  * @returns {string} - Signed JWT token
  */
 const generateToken = (id) => {
-  // Check if secret exists
   if (!process.env.JWT_SECRET) {
     console.error("❌ JWT Error: JWT_SECRET is missing in .env file");
     throw new Error("JWT secret is missing");
