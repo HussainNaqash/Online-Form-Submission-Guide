@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Progress } from "@/components/ui/progress";
@@ -6,32 +7,33 @@ import { Card } from "@/components/ui/card";
 import { Bell, FileCheck, Upload, ArrowRight } from "lucide-react";
 
 const notifications = [
-  {
-    icon: Bell,
-    text: "Your application for 'Software Engineer' has been submitted successfully.",
-  },
-  {
-    icon: Bell,
-    text: "Profile review pending for 'Academic Information' section.",
-  },
-  {
-    icon: Bell,
-    text: "New job opening: 'Data Scientist' at Tech Solutions, apply now!",
-  },
-  {
-    icon: Bell,
-    text: "Admission results for 'MBA Program' will be announced on May 15th.",
-  },
+  { icon: Bell, text: "Your application for 'Software Engineer' has been submitted successfully." },
+  { icon: Bell, text: "Profile review pending for 'Academic Information' section." },
+  { icon: Bell, text: "New job opening: 'Data Scientist' at Tech Solutions, apply now!" },
+  { icon: Bell, text: "Admission results for 'MBA Program' will be announced on May 15th." },
 ];
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  
+  const [username, setUsername] = useState("User");
+
+  useEffect(() => {
+    const userInfo = localStorage.getItem("userInfo");
+    if (userInfo) {
+      try {
+        const user = JSON.parse(userInfo);
+        if (user.username) setUsername(user.username);
+      } catch (err) {
+        console.error("Failed to parse user info:", err);
+      }
+    }
+  }, []);
+
   return (
     <DashboardLayout>
       <div className="max-w-6xl">
         <h1 className="text-4xl font-bold text-foreground mb-2">
-          Welcome, 22FYP-09!
+          Welcome, {username}!
         </h1>
         <p className="text-muted-foreground mb-8">
           Your personalized portal for jobs and admissions in Pakistan. Here's a
@@ -76,9 +78,7 @@ const Dashboard = () => {
                   <Upload className="w-5 h-5 text-info" />
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">
-                    Documents Uploaded
-                  </p>
+                  <p className="text-xs text-muted-foreground">Documents Uploaded</p>
                   <p className="font-semibold">3 of 5</p>
                 </div>
               </div>
@@ -92,10 +92,7 @@ const Dashboard = () => {
             {notifications.map((notification, index) => {
               const Icon = notification.icon;
               return (
-                <div
-                  key={index}
-                  className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors"
-                >
+                <div key={index} className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors">
                   <Icon className="w-4 h-4 text-info mt-0.5 flex-shrink-0" />
                   <p className="text-sm text-foreground">{notification.text}</p>
                 </div>

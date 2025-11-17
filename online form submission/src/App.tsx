@@ -1,8 +1,8 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
+import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
@@ -11,27 +11,95 @@ import { AddressInfo, EducationalInfo, Certifications, Experience } from "./page
 import Applications from "./pages/Applications";
 import Documents from "./pages/Documents";
 import NotFound from "./pages/NotFound";
+import { PrivateRoute } from "./components/PrivateRoute";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
+      <Toaster position="top-right" richColors toastOptions={{ duration: 3000, className: "mb-2" }} />
+
       <BrowserRouter>
         <Routes>
+          {/* Public */}
           <Route path="/" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/profile/personal" element={<PersonalInfo />} />
-          <Route path="/profile/AddressInfo" element={<AddressInfo />} />
-          <Route path="/profile/EducationalInfo" element={<EducationalInfo />} />
-          <Route path="/profile/Certifications" element={<Certifications />} />
-          <Route path="/profile/Experience" element={<Experience />} />
-          <Route path="/applications" element={<Applications />} />
-          <Route path="/documents" element={<Documents />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+
+          {/* Protected */}
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile/personal"
+            element={
+              <PrivateRoute>
+                <PersonalInfo />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile/AddressInfo"
+            element={
+              <PrivateRoute>
+                <AddressInfo />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile/EducationalInfo"
+            element={
+              <PrivateRoute>
+                <EducationalInfo />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile/Certifications"
+            element={
+              <PrivateRoute>
+                <Certifications />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile/Experience"
+            element={
+              <PrivateRoute>
+                <Experience />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/applications"
+            element={
+              <PrivateRoute>
+                <Applications />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/documents"
+            element={
+              <PrivateRoute>
+                <Documents />
+              </PrivateRoute>
+            }
+          />
+
+          {/* 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
