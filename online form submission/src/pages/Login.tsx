@@ -47,6 +47,10 @@ const Login = () => {
 
   // --- UI states ---
   const [loading, setLoading] = useState(false);
+<<<<<<< HEAD
+=======
+  const [rememberMe, setRememberMe] = useState(false);
+>>>>>>> 25a7b61 (front Fixation)
 
   const location = useLocation();
 
@@ -56,6 +60,22 @@ const Login = () => {
       toast.success("Email verified successfully! You can now log in.");
     }
   }, [location]);
+<<<<<<< HEAD
+=======
+
+  useEffect(() => {
+    // load remembered email if present
+    try {
+      const saved = localStorage.getItem("rememberEmail");
+      if (saved) {
+        setEmail(saved);
+        setRememberMe(true);
+      }
+    } catch (e) {
+      // ignore (e.g., during SSR)
+    }
+  }, []);
+>>>>>>> 25a7b61 (front Fixation)
   // Strong password regex
   const strongPasswordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{}|;:,.<>?]).{8,}$/;
@@ -101,6 +121,18 @@ const Login = () => {
         toast.success(`Welcome back, ${username}! 🎉`, { id: "login-success" });
         localStorage.setItem("authToken", res.token);
         localStorage.setItem("userInfo", JSON.stringify(res.data));
+<<<<<<< HEAD
+=======
+        try {
+          if (rememberMe) {
+            localStorage.setItem("rememberEmail", email);
+          } else {
+            localStorage.removeItem("rememberEmail");
+          }
+        } catch (e) {
+          // ignore storage errors
+        }
+>>>>>>> 25a7b61 (front Fixation)
         navigate("/dashboard");
       } else if (res.message === "Please verify your email first") {
         toast.error("Please verify your email first", {
@@ -191,6 +223,7 @@ const Login = () => {
     }
   };
 
+<<<<<<< HEAD
   // --- Render ---
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
@@ -402,9 +435,270 @@ const Login = () => {
         <footer className="text-center mt-6 text-white text-xs drop-shadow-lg">
           © 2025 Online Form Submission Guide | Sukkur IBA University
         </footer>
+=======
+  // Inject gradient CSS for animated background on the client only
+  useEffect(() => {
+    const css = `
+      .animate-gradient {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(270deg, #7c3aed, #06b6d4, #60a5fa, #f97316);
+        background-size: 800% 800%;
+        animation: gradientShift 18s ease infinite;
+        opacity: 0.15;
+      }
+      @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+    `;
+
+    const styleEl = document.createElement('style');
+    styleEl.setAttribute('data-from', 'LoginComponent');
+    styleEl.textContent = css;
+    document.head.appendChild(styleEl);
+    return () => {
+      document.head.removeChild(styleEl);
+    };
+  }, []);
+
+  // --- Render ---
+  return (
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden py-12">
+      {/* animated gradient background */}
+      <div className="absolute inset-0 -z-10">
+        <div className="w-full h-full animate-gradient" />
+      </div>
+
+      <div className="w-full max-w-4xl mx-auto px-2">
+        <div className="flex flex-col md:flex-row bg-white rounded-3xl shadow-xl overflow-hidden">
+
+          {/* LEFT: Form area */}
+          <div className="w-full md:w-1/2 p-8 lg:p-12">
+            <div className="max-w-sm">
+              <div className="mb-6">
+                <h1 className="text-4xl font-extrabold text-foreground mb-2">Application Portal</h1>
+                <p className="text-muted-foreground">Your gateway to academic and career opportunities.</p>
+              </div>
+
+              <div className="bg-card rounded-2xl shadow-sm p-6">
+                {(view === "login" || view === "signup") && (
+                  <Tabs defaultValue={view} onValueChange={(v) => setView(v as AuthView)} className="w-full">
+                    <TabsList className="grid w-full grid-cols-2 mb-6">
+                      <TabsTrigger value="signup" disabled={loading}>Signup</TabsTrigger>
+                      <TabsTrigger value="login" disabled={loading}>Login</TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="login">
+                      <form onSubmit={handleLogin} className="space-y-5">
+                        <div className="space-y-2">
+                          <Label htmlFor="email">Email</Label>
+                          <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} required />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="password">Password</Label>
+                          <div className="relative">
+                            <Input
+                              id="password"
+                              type={showPassword ? "text" : "password"}
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
+                              disabled={loading}
+                              required
+                              className="pr-10"
+                            />
+                            <button
+                              type="button"
+                              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                              onClick={() => setShowPassword(!showPassword)}
+                              tabIndex={-1}
+                            >
+                              {showPassword ? <MdVisibilityOff size={20} /> : <MdVisibility size={20} />}
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="remember"
+                              checked={rememberMe}
+                              onCheckedChange={(v) => setRememberMe(Boolean(v))}
+                              disabled={loading}
+                            />
+                            <label htmlFor="remember" className="text-sm text-muted-foreground cursor-pointer">Remember Me</label>
+                          </div>
+                          <Button type="button" variant="link" onClick={() => setView("forgotPassword")} disabled={loading}>
+                            Forgot Password?
+                          </Button>
+                        </div>
+
+                        <Button type="submit" className="w-full" size="lg" disabled={loading}>{loading ? "Loading..." : "Login"}</Button>
+                      </form>
+                    </TabsContent>
+
+                    <TabsContent value="signup">
+                      <form onSubmit={handleSignup} className="space-y-5">
+                        <div className="space-y-2">
+                          <Label htmlFor="signup-username">Username</Label>
+                          <Input id="signup-username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} disabled={loading} required />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="signup-email">Email</Label>
+                          <Input id="signup-email" type="email" value={signupEmail} onChange={(e) => setSignupEmail(e.target.value)} disabled={loading} required />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="signup-password">Password</Label>
+                          <Label className="text-sm text-muted-foreground block pb-3">At least 8 characters, mix of upper/lowercase, number & special char.</Label>
+                          <div className="relative">
+                            <Input
+                              id="signup-password"
+                              type={showSignupPassword ? "text" : "password"}
+                              value={signupPassword}
+                              onChange={(e) => setSignupPassword(e.target.value)}
+                              disabled={loading}
+                              required
+                              className="pr-10"
+                            />
+                            <button
+                              type="button"
+                              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                              onClick={() => setShowSignupPassword(!showSignupPassword)}
+                              tabIndex={-1}
+                            >
+                              {showSignupPassword ? <MdVisibilityOff size={20} /> : <MdVisibility size={20} />}
+                            </button>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="signup-confirm-password">Confirm Password</Label>
+                          <div className="relative">
+                            <Input
+                              id="signup-confirm-password"
+                              type={showSignupConfirmPassword ? "text" : "password"}
+                              value={signupConfirmPassword}
+                              onChange={(e) => setSignupConfirmPassword(e.target.value)}
+                              disabled={loading}
+                              required
+                              className="pr-10"
+                            />
+                            <button
+                              type="button"
+                              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                              onClick={() => setShowSignupConfirmPassword(!showSignupConfirmPassword)}
+                              tabIndex={-1}
+                            >
+                              {showSignupConfirmPassword ? <MdVisibilityOff size={20} /> : <MdVisibility size={20} />}
+                            </button>
+                          </div>
+                        </div>
+                        <Button type="submit" className="w-full" size="lg" disabled={loading}>{loading ? "Loading..." : "Create Account"}</Button>
+                      </form>
+                    </TabsContent>
+                  </Tabs>
+                )}
+
+                {view === "forgotPassword" && (
+                  <div className="space-y-5">
+                    <h3 className="font-semibold">Forgot Password</h3>
+                    <form onSubmit={handleForgotPassword} className="space-y-4">
+                      <Label htmlFor="forgot-email">Email</Label>
+                      <Input id="forgot-email" type="email" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} disabled={loading} required />
+                      <Button type="submit" className="w-full" size="lg" disabled={loading}>{loading ? "Sending..." : "Send OTP"}</Button>
+                      <Button type="button" variant="link" className="w-full" onClick={() => setView("login")} disabled={loading}>Back to Login</Button>
+                    </form>
+                  </div>
+                )}
+
+                {view === "resetPassword" && (
+                  <div className="space-y-5">
+                    <h3 className="font-semibold">Reset Password</h3>
+                    <p className="text-sm text-muted-foreground">OTP sent to <strong>{forgotEmail}</strong></p>
+                    <form onSubmit={handleResetPassword} className="space-y-4">
+                      <Label>Enter 6-Digit OTP</Label>
+                      <InputOTP maxLength={6} value={otp} onChange={(val) => setOtp(val)}>
+                        <InputOTPGroup className="w-full">
+                          <InputOTPSlot index={0} /><InputOTPSlot index={1} /><InputOTPSlot index={2} />
+                          <InputOTPSeparator />
+                          <InputOTPSlot index={3} /><InputOTPSlot index={4} /><InputOTPSlot index={5} />
+                        </InputOTPGroup>
+                      </InputOTP>
+                      <div className="space-y-2">
+                        <Label htmlFor="new-password">New Password</Label>
+                        <div className="relative">
+                          <Input
+                            id="new-password"
+                            type={showNewPassword ? "text" : "password"}
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            disabled={loading}
+                            required
+                            className="pr-10"
+                          />
+                          <button
+                            type="button"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                            onClick={() => setShowNewPassword(!showNewPassword)}
+                            tabIndex={-1}
+                          >
+                            {showNewPassword ? <MdVisibilityOff size={20} /> : <MdVisibility size={20} />}
+                          </button>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="confirm-new-password">Confirm Password</Label>
+                        <div className="relative">
+                          <Input
+                            id="confirm-new-password"
+                            type={showConfirmNewPassword ? "text" : "password"}
+                            value={confirmNewPassword}
+                            onChange={(e) => setConfirmNewPassword(e.target.value)}
+                            disabled={loading}
+                            required
+                            className="pr-10"
+                          />
+                          <button
+                            type="button"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                            onClick={() => setShowConfirmNewPassword(!showConfirmNewPassword)}
+                            tabIndex={-1}
+                          >
+                            {showConfirmNewPassword ? <MdVisibilityOff size={20} /> : <MdVisibility size={20} />}
+                          </button>
+                        </div>
+                      </div>
+                      <Button type="submit" className="w-full" size="lg" disabled={loading}>{loading ? "Resetting..." : "Reset Password"}</Button>
+                      <Button type="button" variant="link" className="w-full" onClick={() => setView("login")} disabled={loading}>Back to Login</Button>
+                    </form>
+                  </div>
+                )}
+              </div>
+
+              <footer className="mt-6 text-xs text-muted-foreground">© 2025 Online Form Submission Guide</footer>
+            </div>
+          </div>
+
+          {/* RIGHT: Image/marketing area */}
+          <div className="hidden md:block md:w-1/2 relative">
+          <img
+            src={loginBg}
+            alt="Background"
+            className="absolute inset-0 w-full h-full object-cover"/>
+
+            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-700/60 to-sky-400/30 backdrop-blur-sm flex flex-col justify-center items-start p-12 text-white">
+              <h2 className="text-3xl font-bold mb-2">Welcome Back</h2>
+                <p className="max-w-xs text-sm opacity-95">
+                  Access your application dashboard, manage documents, and track submissions with ease.
+                </p>
+              </div>
+           </div>
+        </div>
+>>>>>>> 25a7b61 (front Fixation)
       </div>
     </div>
   );
-};
+
+}
 
 export default Login;

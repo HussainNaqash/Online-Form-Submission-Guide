@@ -3,6 +3,11 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
+<<<<<<< HEAD
+=======
+import profileRoutes from "./routes/profile.routes.js";
+import path from "path";
+>>>>>>> 25a7b61 (front Fixation)
 
 dotenv.config({ path: "../.env" });
 
@@ -15,6 +20,15 @@ app.use(express.json());
 
 // Mount auth routes
 app.use("/api/auth", authRoutes);
+<<<<<<< HEAD
+=======
+// Mount profile routes
+app.use("/api/profile", profileRoutes);
+
+// serve uploads directory
+const uploadsDir = path.join(process.cwd(), "backend", "uploads");
+app.use("/uploads", express.static(uploadsDir));
+>>>>>>> 25a7b61 (front Fixation)
 
 app.get("/", (req, res) => {
   res.send("Backend API is running...");

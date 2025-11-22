@@ -6,7 +6,6 @@ import { toast } from "sonner";
 const navItems = [
   { to: "/dashboard", icon: Home, label: "Dashboard Home" },
   { to: "/profile", icon: User, label: "Profile" },
-  { to: "/applications", icon: FileText, label: "View Applications" },
   { to: "/documents", icon: Upload, label: "Upload Documents" },
 ];
 

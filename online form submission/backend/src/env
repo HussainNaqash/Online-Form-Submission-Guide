@@ -1,0 +1,15 @@
+# Server Port
+PORT=8000
+
+# MongoDB
+MONGO_URI=mongodb://localhost:27017/Online-form
+
+# JWT Secret (strong and random string)
+JWT_SECRET=123/./././././././././.123123
+
+# Email configuration (for sending OTPs)
+EMAIL_USER=bhandsohail69@gmail.com
+EMAIL_PASS=swhs vsqd tusr usym
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_SECURE=false

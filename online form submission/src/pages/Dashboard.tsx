@@ -16,6 +16,10 @@ const notifications = [
 const Dashboard = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("User");
+<<<<<<< HEAD
+=======
+  const [progress, setProgress] = useState(0);
+>>>>>>> 25a7b61 (front Fixation)
 
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
@@ -27,6 +31,35 @@ const Dashboard = () => {
         console.error("Failed to parse user info:", err);
       }
     }
+<<<<<<< HEAD
+=======
+
+    // compute profile completion progress
+    const sections = ["personalInfo", "addressInfo", "educationalInfo", "certifications", "experience"];
+    let completed = 0;
+    sections.forEach((key) => {
+      try {
+        const v = localStorage.getItem(key);
+        if (v) {
+          // for arrays, check non-empty
+          const parsed = JSON.parse(v);
+          if (Array.isArray(parsed)) {
+            if (parsed.length > 0) completed += 1;
+          } else if (typeof parsed === 'object') {
+            // check at least one field filled
+            if (Object.keys(parsed).length > 0) completed += 1;
+          } else {
+            completed += 1;
+          }
+        }
+      } catch (err) {
+        // if parse fails, but item exists, count it
+        if (localStorage.getItem(key)) completed += 1;
+      }
+    });
+    const pct = Math.round((completed / sections.length) * 100);
+    setProgress(pct);
+>>>>>>> 25a7b61 (front Fixation)
   }, []);
 
   return (
@@ -49,9 +82,9 @@ const Dashboard = () => {
                   <span className="text-sm font-medium text-muted-foreground">
                     Profile Completion
                   </span>
-                  <span className="text-sm font-bold text-primary">60%</span>
+                  <span className="text-sm font-bold text-primary">{progress}%</span>
                 </div>
-                <Progress value={60} className="h-2" />
+                <Progress value={progress} className="h-2" />
                 <p className="text-sm text-muted-foreground mt-4">
                   Complete your profile to unlock full application features.
                 </p>

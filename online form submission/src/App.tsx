@@ -8,7 +8,6 @@ import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import PersonalInfo from "./pages/ProfileCreation";
 import { AddressInfo, EducationalInfo, Certifications, Experience } from "./pages/ProfileCreation";
-import Applications from "./pages/Applications";
 import Documents from "./pages/Documents";
 import NotFound from "./pages/NotFound";
 import { PrivateRoute } from "./components/PrivateRoute";
@@ -83,6 +82,7 @@ const App = () => (
             }
           />
           <Route
+<<<<<<< HEAD
             path="/applications"
             element={
               <PrivateRoute>
@@ -91,6 +91,8 @@ const App = () => (
             }
           />
           <Route
+=======
+>>>>>>> 25a7b61 (front Fixation)
             path="/documents"
             element={
               <PrivateRoute>
