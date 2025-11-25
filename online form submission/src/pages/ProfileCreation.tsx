@@ -6,6 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2, MapPin, Phone } from "lucide-react";
+import { toast } from "sonner";
 import { 
   PageHeader, 
   FormInput, 
@@ -39,6 +40,25 @@ const PersonalInfo = () => {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    // validate required fields
+    const missing: string[] = [];
+    if (!formData.fullName && !originalData.fullName) missing.push("Full Name");
+    if (!formData.fatherName && !originalData.fatherName) missing.push("Father's Name");
+    if (!formData.cnic && !originalData.cnic) missing.push("CNIC Number");
+    if (!formData.dob && !originalData.dob) missing.push("Date of Birth");
+    if (!formData.gender && !originalData.gender) missing.push("Gender");
+    if (!formData.nationality && !originalData.nationality) missing.push("Nationality");
+    if (!formData.religion && !originalData.religion) missing.push("Religion");
+    if (!formData.maritalStatus && !originalData.maritalStatus) missing.push("Marital Status");
+    if (!formData.contact && !originalData.contact) missing.push("Contact Number");
+    if (!formData.email && !originalData.email) missing.push("Email Address");
+    const photoExists = photoPreview || originalData.passportPhoto;
+    if (!photoExists) missing.push("Passport Photo (upload)");
+
+    if (missing.length > 0) {
+      toast.error("Please fill the required fields: " + missing.join(", "));
+      return;
+    }
     // Merge existing saved data with newly entered values (empty fields keep original values)
     const merged = {
       ...originalData,
@@ -118,21 +138,21 @@ const PersonalInfo = () => {
         <Card className="p-8">
           <form className="space-y-6" onSubmit={handleSave}>
             <div className="grid md:grid-cols-3 gap-6">
-              <FormInput id="fullName" label="Full Name" value={formData.fullName} placeholder={originalData.fullName || ""} onChange={handleChange} />
-              <FormInput id="fatherName" label="Father's Name" value={formData.fatherName} placeholder={originalData.fatherName || ""} onChange={handleChange} />
-              <FormInput id="cnic" label="CNIC Number" value={formData.cnic} placeholder={originalData.cnic || ""} onChange={handleChange} />
+              <FormInput required id="fullName" label="Full Name" value={formData.fullName} placeholder={originalData.fullName || ""} onChange={handleChange} />
+              <FormInput required id="fatherName" label="Father's Name" value={formData.fatherName} placeholder={originalData.fatherName || ""} onChange={handleChange} />
+              <FormInput required id="cnic" label="CNIC Number" value={formData.cnic} placeholder={originalData.cnic || ""} onChange={handleChange} />
             </div>
             <div className="grid md:grid-cols-3 gap-6">
-              <FormInput id="dob" type="date" label="Date of Birth" value={formData.dob} placeholder={originalData.dob || ""} onChange={handleChange} />
-              <FormInput id="gender" label="Gender" value={formData.gender} placeholder={originalData.gender || ""} onChange={handleChange} />
-              <FormInput id="nationality" label="Nationality" value={formData.nationality} placeholder={originalData.nationality || ""} onChange={handleChange} />
+              <FormInput required id="dob" type="date" label="Date of Birth" value={formData.dob} placeholder={originalData.dob || ""} onChange={handleChange} />
+              <FormInput required id="gender" label="Gender" value={formData.gender} placeholder={originalData.gender || ""} onChange={handleChange} />
+              <FormInput required id="nationality" label="Nationality" value={formData.nationality} placeholder={originalData.nationality || ""} onChange={handleChange} />
             </div>
             <div className="grid md:grid-cols-3 gap-6">
-              <FormInput id="religion" label="Religion" value={formData.religion} placeholder={originalData.religion || ""} onChange={handleChange} />
-              <FormInput id="maritalStatus" label="Marital Status" value={formData.maritalStatus} placeholder={originalData.maritalStatus || ""} onChange={handleChange} />
-              <FormInput id="contact" label="Contact Number" value={formData.contact} placeholder={originalData.contact || ""} onChange={handleChange} />
+              <FormInput required id="religion" label="Religion" value={formData.religion} placeholder={originalData.religion || ""} onChange={handleChange} />
+              <FormInput required id="maritalStatus" label="Marital Status" value={formData.maritalStatus} placeholder={originalData.maritalStatus || ""} onChange={handleChange} />
+              <FormInput required id="contact" label="Contact Number" value={formData.contact} placeholder={originalData.contact || ""} onChange={handleChange} />
             </div>
-            <FormInput id="email" type="email" label="Email Address" className="max-w-md" value={formData.email} placeholder={originalData.email || ""} onChange={handleChange} />
+            <FormInput required id="email" type="email" label="Email Address" className="max-w-md" value={formData.email} placeholder={originalData.email || ""} onChange={handleChange} />
 
             <div className="pt-6 border-t">
               <h3 className="text-lg font-semibold mb-4">Upload Passport Photo</h3>
@@ -218,14 +238,14 @@ const AddressInfo = () => {
 
   const AddressBlock = ({ type, data, disabled }: any) => (
     <div className="space-y-6">
-      <FormInput label="Address" icon={MapPin} value={data.address} placeholder={type === 'permanent' ? (originalAddress.permanent?.address || '') : (originalAddress.current?.address || '')} disabled={disabled} onChange={(e: any) => handleAddressChange(type, "address", e.target.value)} />
+      <FormInput required label="Address" icon={MapPin} value={data.address} placeholder={type === 'permanent' ? (originalAddress.permanent?.address || '') : (originalAddress.current?.address || '')} disabled={disabled} onChange={(e: any) => handleAddressChange(type, "address", e.target.value)} />
       <div className="grid md:grid-cols-2 gap-6">
-        <FormSelect label="Province" options={provinces} value={data.province} placeholder={type === 'permanent' ? (originalAddress.permanent?.province || '') : (originalAddress.current?.province || '')} disabled={disabled} onChange={(v: string) => handleAddressChange(type, "province", v)} />
-        <FormInput label="District" value={data.district} placeholder={type === 'permanent' ? (originalAddress.permanent?.district || '') : (originalAddress.current?.district || '')} disabled={disabled} onChange={(e: any) => handleAddressChange(type, "district", e.target.value)} />
+        <FormSelect required label="Province" options={provinces} value={data.province} placeholder={type === 'permanent' ? (originalAddress.permanent?.province || '') : (originalAddress.current?.province || '')} disabled={disabled} onChange={(v: string) => handleAddressChange(type, "province", v)} />
+        <FormInput required label="District" value={data.district} placeholder={type === 'permanent' ? (originalAddress.permanent?.district || '') : (originalAddress.current?.district || '')} disabled={disabled} onChange={(e: any) => handleAddressChange(type, "district", e.target.value)} />
       </div>
       <div className="grid md:grid-cols-2 gap-6">
-        <FormInput label="City/Town" value={data.city} placeholder={type === 'permanent' ? (originalAddress.permanent?.city || '') : (originalAddress.current?.city || '')} disabled={disabled} onChange={(e: any) => handleAddressChange(type, "city", e.target.value)} />
-        <FormInput label="Postal Code" value={data.postalCode} placeholder={type === 'permanent' ? (originalAddress.permanent?.postalCode || '') : (originalAddress.current?.postalCode || '')} disabled={disabled} onChange={(e: any) => handleAddressChange(type, "postalCode", e.target.value)} />
+        <FormInput required label="City/Town" value={data.city} placeholder={type === 'permanent' ? (originalAddress.permanent?.city || '') : (originalAddress.current?.city || '')} disabled={disabled} onChange={(e: any) => handleAddressChange(type, "city", e.target.value)} />
+        <FormInput required label="Postal Code" value={data.postalCode} placeholder={type === 'permanent' ? (originalAddress.permanent?.postalCode || '') : (originalAddress.current?.postalCode || '')} disabled={disabled} onChange={(e: any) => handleAddressChange(type, "postalCode", e.target.value)} />
       </div>
     </div>
   );
@@ -236,35 +256,62 @@ const AddressInfo = () => {
         <PageHeader title="Address Information" description="Enter your permanent and current address details." />
         <Card className="p-8">
             <form onSubmit={async (e) => {
-              e.preventDefault();
-              // Merge saved original address with any newly entered values
-              const merge = (orig: any = {}, curr: any = {}) => ({
-                address: curr.address || orig.address || "",
-                province: curr.province || orig.province || "",
-                district: curr.district || orig.district || "",
-                city: curr.city || orig.city || "",
-                postalCode: curr.postalCode || orig.postalCode || "",
-              });
+                e.preventDefault();
+                // validate required address fields
+                const missing: string[] = [];
+                const perm = permanent;
+                if (!perm.address && !originalAddress.permanent?.address) missing.push("Permanent Address");
+                if (!perm.province && !originalAddress.permanent?.province) missing.push("Permanent Province");
+                if (!perm.district && !originalAddress.permanent?.district) missing.push("Permanent District");
+                if (!perm.city && !originalAddress.permanent?.city) missing.push("Permanent City/Town");
+                if (!perm.postalCode && !originalAddress.permanent?.postalCode) missing.push("Permanent Postal Code");
 
-              const mergedPermanent = merge(originalAddress.permanent || {}, permanent);
-              const mergedCurrent = merge(originalAddress.current || {}, (sameAsPermanent ? mergedPermanent : current));
-
-              try { localStorage.setItem("addressInfo", JSON.stringify({ permanent: mergedPermanent, current: mergedCurrent, files })); } catch (err) {}
-
-              // If authenticated, send address to backend
-              try {
-                const token = localStorage.getItem("authToken");
-                if (token) {
-                  await fetch("http://localhost:8000/api/profile", {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-                    body: JSON.stringify({ address: { permanent: mergedPermanent, current: mergedCurrent, files } }),
-                  });
+                if (!sameAsPermanent) {
+                  const cur = current;
+                  if (!cur.address && !originalAddress.current?.address) missing.push("Current Address");
+                  if (!cur.province && !originalAddress.current?.province) missing.push("Current Province");
+                  if (!cur.district && !originalAddress.current?.district) missing.push("Current District");
+                  if (!cur.city && !originalAddress.current?.city) missing.push("Current City/Town");
+                  if (!cur.postalCode && !originalAddress.current?.postalCode) missing.push("Current Postal Code");
                 }
-              } catch (err) {}
 
-              navigate("/profile/EducationalInfo");
-            }}>
+                // require domicile and prc uploads
+                if (!files.domicile.preview) missing.push("Domicile upload");
+                if (!files.prc.preview) missing.push("PRC-D upload");
+
+                if (missing.length > 0) {
+                  toast.error("Please fill the required fields: " + missing.join(", "));
+                  return;
+                }
+
+                // Merge saved original address with any newly entered values
+                const merge = (orig: any = {}, curr: any = {}) => ({
+                  address: curr.address || orig.address || "",
+                  province: curr.province || orig.province || "",
+                  district: curr.district || orig.district || "",
+                  city: curr.city || orig.city || "",
+                  postalCode: curr.postalCode || orig.postalCode || "",
+                });
+
+                const mergedPermanent = merge(originalAddress.permanent || {}, permanent);
+                const mergedCurrent = merge(originalAddress.current || {}, (sameAsPermanent ? mergedPermanent : current));
+
+                try { localStorage.setItem("addressInfo", JSON.stringify({ permanent: mergedPermanent, current: mergedCurrent, files })); } catch (err) {}
+
+                // If authenticated, send address to backend
+                try {
+                  const token = localStorage.getItem("authToken");
+                  if (token) {
+                    await fetch("http://localhost:8000/api/profile", {
+                      method: "PUT",
+                      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+                      body: JSON.stringify({ address: { permanent: mergedPermanent, current: mergedCurrent, files } }),
+                    });
+                  }
+                } catch (err) {}
+
+                navigate("/profile/EducationalInfo");
+              }}>
             <h2 className="text-xl font-semibold mb-4">Permanent Address</h2>
             <AddressBlock type="permanent" data={permanent} />
 
@@ -334,6 +381,30 @@ const EducationalInfo = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // validation: at least one entry and required fields per entry
+    if (!entries || entries.length === 0) {
+      toast.error("Please add at least one educational entry before continuing.");
+      return;
+    }
+
+    const problems: string[] = [];
+    entries.forEach((en, idx) => {
+      const missing: string[] = [];
+      if (!en.level) missing.push("Level");
+      if (!en.institute) missing.push("Institute");
+      if (!en.board) missing.push("Board");
+      if (!en.startDate) missing.push("Start Date");
+      if (!en.endDate) missing.push("End Date");
+      if (!en.obtainedMarks) missing.push("Obtained Marks");
+      if (!en.totalMarks) missing.push("Total Marks");
+      if (missing.length > 0) problems.push(`Entry ${idx + 1}: ${missing.join(", ")}`);
+    });
+
+    if (problems.length > 0) {
+      toast.error("Please fix required fields:\n" + problems.join("; "));
+      return;
+    }
+
     try { localStorage.setItem("educationalInfo", JSON.stringify(entries)); } catch (err) {}
 
     // Prepare payload (strip File objects, include preview URLs if available)
@@ -442,7 +513,11 @@ const Certifications = () => {
               <Button onClick={() => setEntries([...entries, { id: Date.now() }])} variant="outline"><Plus className="mr-2"/> Add Certification</Button>
            </div>
            {/* Render Inputs */}
-          <FormNavigation onBack={() => navigate("/profile/EducationalInfo")} onNext={() => { try { localStorage.setItem("certifications", JSON.stringify(entries)); } catch (err) {} navigate("/profile/Experience"); }} />
+          <FormNavigation onBack={() => navigate("/profile/EducationalInfo")} onNext={() => {
+            if (!entries || entries.length === 0) { toast.error("Please add at least one certification before continuing."); return; }
+            try { localStorage.setItem("certifications", JSON.stringify(entries)); } catch (err) {}
+            navigate("/profile/Experience");
+          }} />
         </Card>
        </div>
     </DashboardLayout>
@@ -464,7 +539,11 @@ const Experience = () => {
            <div className="text-center py-8">
               <Button onClick={() => setEntries([...entries, { id: Date.now() }])} variant="outline"><Plus className="mr-2"/> Add Experience</Button>
            </div>
-          <FormNavigation onBack={() => navigate("/profile/Certifications")} onNext={() => { try { localStorage.setItem("experience", JSON.stringify(entries)); } catch (err) {} navigate("/dashboard"); }} />
+          <FormNavigation onBack={() => navigate("/profile/Certifications")} onNext={() => {
+            if (!entries || entries.length === 0) { toast.error("Please add at least one experience entry before continuing."); return; }
+            try { localStorage.setItem("experience", JSON.stringify(entries)); } catch (err) {}
+            navigate("/dashboard");
+          }} />
         </Card>
        </div>
     </DashboardLayout>

@@ -115,3 +115,105 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+/* Subtle motion and progress utilities used by the Dashboard */
+@layer utilities {
+  @keyframes float-vertical {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+    100% { transform: translateY(0); }
+  }
+
+  .float-anim {
+    animation: float-vertical 6s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  .smooth-progress-inner {
+    transition: width 1.6s cubic-bezier(.22,.98,.38,.98);
+  }
+
+  .soft-glass {
+    background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.35));
+    backdrop-filter: blur(6px);
+  }
+}
+
+/* Premium motion + gradient utilities */
+@layer utilities {
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up {
+    animation: fade-up 520ms cubic-bezier(.2,.9,.2,1) both;
+  }
+
+  @keyframes gradient-slide {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .progress-gradient {
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--info)));
+    background-size: 300% 100%;
+    animation: gradient-slide 3.6s linear infinite;
+  }
+
+  .card-entrance {
+    transform-origin: center;
+    transition: transform 280ms cubic-bezier(.2,.9,.2,1), box-shadow 220ms ease;
+  }
+
+  .card-entrance:hover {
+    transform: translateY(-6px);
+  }
+
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -120%; height: 100%; width: 120%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+    transform: skewX(-20deg);
+    animation: shimmer 2.2s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes shimmer {
+    0% { left: -120%; }
+    100% { left: 120%; }
+  }
+}
+
+/* Sidebar animated gradient */
+@layer utilities {
+  .sidebar-gradient {
+    background: linear-gradient(180deg, hsl(235 85% 60% / 1), hsl(265 85% 48% / 1));
+    background-size: 200% 200%;
+    animation: gradient-slide 6s ease-in-out infinite;
+    color: white;
+  }
+
+  .sidebar-item {
+    color: rgba(255,255,255,0.92);
+  }
+
+  .btn-gradient {
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)));
+    color: hsl(var(--primary-foreground));
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.12);
+  }
+
+  .btn-contrast {
+    background: linear-gradient(90deg, hsl(260 70% 52%), hsl(210 100% 45%));
+    color: white;
+    border-radius: 12px;
+  }
+}
